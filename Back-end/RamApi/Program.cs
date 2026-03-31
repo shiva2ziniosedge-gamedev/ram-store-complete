@@ -24,6 +24,6 @@ using (var scope = app.Services.CreateScope())
 app.UseCors();
 app.MapControllers();
 
-// Use Railway's PORT environment variable
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5299";
+// Use Render's PORT environment variable
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 app.Run($"http://0.0.0.0:{port}");
