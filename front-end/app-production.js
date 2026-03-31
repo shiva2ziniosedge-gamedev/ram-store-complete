@@ -1,5 +1,5 @@
 // Production version - Render backend URL
-const API = 'https://ram-store-backend.onrender.com/api';
+const API = 'https://ram-store-complete.onrender.com/api';
 
 let rams = [];
 let currentRamId = null;
