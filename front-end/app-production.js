@@ -1,5 +1,5 @@
-// Production version - will be updated with Railway URL after backend deployment
-const API = 'https://your-railway-app.railway.app/api';
+// Production version - Render backend URL
+const API = 'https://ram-store-backend.onrender.com/api';
 
 let rams = [];
 let currentRamId = null;
