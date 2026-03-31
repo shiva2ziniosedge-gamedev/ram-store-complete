@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RAM Store</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="components/scrollToTop.js"></script>
+
+</head>
+<body>
+
+  <header>
+    <h1>🖥️ RAM Store</h1>
+  </header>
+
+  <!-- RAM Listing Table -->
+  <section class="container">
+    <h2>Available RAM</h2>
+    <table id="ramTable">
+      <thead>
+        <tr>
+          <th>RAM Details</th>
+          <th>Price (₹)</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="ramBody"></tbody>
+    </table>
+  </section>
+
+  <!-- Order Form -->
+  <section class="container order-form">
+    <h2>Place Order</h2>
+    <div class="form-row">
+      <input type="text" id="customerName" placeholder="Customer Name" />
+      <input type="email" id="customerEmail" placeholder="Customer Email" />
+      <select id="ramSelect"><option value="">-- Select RAM --</option></select>
+      <input type="number" id="quantity" placeholder="Qty" min="1" value="1" />
+      <button id="orderBtn" onclick="placeOrder()">Order Now</button>
+    </div>
+    <p id="orderMsg" class="msg"></p>
+  </section>
+
+  <!-- Orders List -->
+  <section class="container">
+    <h2>Booked / Confirmed Orders</h2>
+    <table id="orderTable">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>RAM</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="orderBody"></tbody>
+    </table>
+  </section>
+
+  <!-- RAM Detail Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <button class="close-btn" onclick="closeModal()">✕</button>
+      <h2 id="mName"></h2>
+      <table class="detail-table">
+        <tr><td>Brand</td><td id="mBrand"></td></tr>
+        <tr><td>DDR Type</td><td id="mDdr"></td></tr>
+        <tr><td>Speed</td><td id="mSpeed"></td></tr>
+        <tr><td>Capacity</td><td id="mCap"></td></tr>
+        <tr><td>Warranty</td><td id="mWarranty"></td></tr>
+        <tr><td>Price</td><td id="mPrice"></td></tr>
+        <tr><td>Stock</td><td id="mStock"></td></tr>
+      </table>
+
+      <hr style="border-color:#1e2a45; margin:16px 0"/>
+      <h3 style="color:#00d4ff; font-size:0.95rem; margin-bottom:10px">Customer Reviews</h3>
+      <div id="reviewsList"></div>
+
+      <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px">
+        <input id="reviewName" placeholder="Your name" />
+        <select id="reviewRating">
+          <option value="5">⭐⭐⭐⭐⭐</option>
+          <option value="4">⭐⭐⭐⭐</option>
+          <option value="3">⭐⭐⭐</option>
+          <option value="2">⭐⭐</option>
+          <option value="1">⭐</option>
+        </select>
+        <input id="reviewComment" placeholder="Your comment" />
+        <button onclick="submitReview()" style="background:#0f3460;color:#00d4ff;padding:8px;border-radius:6px;border:none;cursor:pointer">
+          Submit Review
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
