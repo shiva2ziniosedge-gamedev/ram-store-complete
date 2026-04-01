@@ -14,64 +14,83 @@
         .btn-admin:hover { background: #00b8e6; }
         .btn-danger { background: #ff4757; color: white; }
         .btn-danger:hover { background: #ff3742; }
+        .login-container { max-width: 400px; margin: 100px auto; padding: 30px; background: #16213e; border-radius: 8px; text-align: center; }
+        .login-form { display: flex; flex-direction: column; gap: 15px; }
+        .login-form input { padding: 12px; border-radius: 4px; border: 1px solid #333; background: #0f1a2e; color: white; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="admin-header">
-        <h1>🔧 RAM Store Admin Panel</h1>
-        <p>Manage your live database</p>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <h1>🔒 Admin Login</h1>
+        <p>Enter admin password to access the panel</p>
+        <div class="login-form">
+            <input type="password" id="adminPassword" placeholder="Admin Password" onkeypress="handleLoginKeypress(event)">
+            <button class="btn-admin" onclick="adminLogin()">Login</button>
+            <div id="loginError" style="color: #ff4757; margin-top: 10px;"></div>
+        </div>
     </div>
 
-    <div class="container">
-        <!-- RAM Management -->
-        <div class="admin-section">
-            <h2>📦 RAM Management</h2>
-            <button class="btn-admin" onclick="showAddRamForm()">+ Add New RAM</button>
-            
-            <div id="addRamForm" style="display:none; margin-top:20px;">
-                <h3>Add New RAM</h3>
-                <div class="edit-form">
-                    <input type="text" id="newName" placeholder="Name">
-                    <input type="text" id="newBrand" placeholder="Brand">
-                    <select id="newDdrType">
-                        <option value="DDR4">DDR4</option>
-                        <option value="DDR5">DDR5</option>
-                    </select>
-                    <input type="number" id="newSpeedMhz" placeholder="Speed (MHz)">
-                    <input type="number" id="newCapacityGb" placeholder="Capacity (GB)">
-                    <input type="number" id="newPrice" placeholder="Price" step="0.01">
-                    <input type="number" id="newStock" placeholder="Stock">
-                    <input type="text" id="newWarranty" placeholder="Warranty">
-                    <input type="text" id="newDescription" placeholder="Description">
+    <!-- Admin Panel (Hidden until login) -->
+    <div id="adminPanel" class="hidden">
+        <div class="admin-header">
+            <h1>🔧 RAM Store Admin Panel</h1>
+            <p>Manage your live database</p>
+            <button class="btn-admin" onclick="adminLogout()" style="position: absolute; top: 20px; right: 20px;">Logout</button>
+        </div>
+
+        <div class="container">
+            <!-- RAM Management -->
+            <div class="admin-section">
+                <h2>📦 RAM Management</h2>
+                <button class="btn-admin" onclick="showAddRamForm()">+ Add New RAM</button>
+                
+                <div id="addRamForm" style="display:none; margin-top:20px;">
+                    <h3>Add New RAM</h3>
+                    <div class="edit-form">
+                        <input type="text" id="newName" placeholder="Name">
+                        <input type="text" id="newBrand" placeholder="Brand">
+                        <select id="newDdrType">
+                            <option value="DDR4">DDR4</option>
+                            <option value="DDR5">DDR5</option>
+                        </select>
+                        <input type="number" id="newSpeedMhz" placeholder="Speed (MHz)">
+                        <input type="number" id="newCapacityGb" placeholder="Capacity (GB)">
+                        <input type="number" id="newPrice" placeholder="Price" step="0.01">
+                        <input type="number" id="newStock" placeholder="Stock">
+                        <input type="text" id="newWarranty" placeholder="Warranty">
+                        <input type="text" id="newDescription" placeholder="Description">
+                    </div>
+                    <button class="btn-admin" onclick="addNewRam()">Add RAM</button>
+                    <button class="btn-admin" onclick="hideAddRamForm()">Cancel</button>
                 </div>
-                <button class="btn-admin" onclick="addNewRam()">Add RAM</button>
-                <button class="btn-admin" onclick="hideAddRamForm()">Cancel</button>
+
+                <div id="ramsList"></div>
             </div>
 
-            <div id="ramsList"></div>
-        </div>
-
-        <!-- Email Test -->
-        <div class="admin-section">
-            <h2>📧 Email Test</h2>
-            <p>Test if email notifications are working:</p>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <input type="email" id="testEmail" placeholder="Enter email to test" style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #333; background: #0f1a2e; color: white;">
-                <button class="btn-admin" onclick="testEmail()">Send Test Email</button>
+            <!-- Email Test -->
+            <div class="admin-section">
+                <h2>📧 Email Test</h2>
+                <p>Test if email notifications are working:</p>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="email" id="testEmail" placeholder="Enter email to test" style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #333; background: #0f1a2e; color: white;">
+                    <button class="btn-admin" onclick="testEmail()">Send Test Email</button>
+                </div>
+                <div id="emailTestResult" style="margin-top: 10px;"></div>
             </div>
-            <div id="emailTestResult" style="margin-top: 10px;"></div>
-        </div>
 
-        <!-- Orders Management -->
-        <div class="admin-section">
-            <h2>📋 Orders Management</h2>
-            <div id="ordersList"></div>
-        </div>
+            <!-- Orders Management -->
+            <div class="admin-section">
+                <h2>📋 Orders Management</h2>
+                <div id="ordersList"></div>
+            </div>
 
-        <!-- Reviews Management -->
-        <div class="admin-section">
-            <h2>⭐ Reviews Management</h2>
-            <div id="reviewsList"></div>
+            <!-- Reviews Management -->
+            <div class="admin-section">
+                <h2>⭐ Reviews Management</h2>
+                <div id="reviewsList"></div>
+            </div>
         </div>
     </div>
 

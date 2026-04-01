@@ -4,9 +4,91 @@ const API = 'https://ram-store-complete.onrender.com/api';
 let rams = [];
 let orders = [];
 let reviews = [];
+let authToken = null;
+
+// Check if already logged in
+function checkAuth() {
+    authToken = localStorage.getItem('adminToken');
+    if (authToken) {
+        showAdminPanel();
+        loadAdminData();
+    } else {
+        showLoginScreen();
+    }
+}
+
+// Show login screen
+function showLoginScreen() {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('adminPanel').classList.add('hidden');
+}
+
+// Show admin panel
+function showAdminPanel() {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('hidden');
+}
+
+// Handle login keypress
+function handleLoginKeypress(event) {
+    if (event.key === 'Enter') {
+        adminLogin();
+    }
+}
+
+// Admin login
+async function adminLogin() {
+    const password = document.getElementById('adminPassword').value;
+    const errorDiv = document.getElementById('loginError');
+    
+    if (!password) {
+        errorDiv.textContent = 'Please enter password';
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API}/admin/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            authToken = data.token;
+            localStorage.setItem('adminToken', authToken);
+            showAdminPanel();
+            loadAdminData();
+            errorDiv.textContent = '';
+        } else {
+            errorDiv.textContent = data.message || 'Login failed';
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        errorDiv.textContent = 'Login failed - network error';
+    }
+}
+
+// Admin logout
+function adminLogout() {
+    authToken = null;
+    localStorage.removeItem('adminToken');
+    showLoginScreen();
+    document.getElementById('adminPassword').value = '';
+}
+
+// Get auth headers
+function getAuthHeaders() {
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+    };
+}
 
 // Load all data
 async function loadAdminData() {
+    if (!authToken) return;
     await loadRams();
     await loadOrders();
     await loadReviews();
@@ -15,7 +97,13 @@ async function loadAdminData() {
 // Load RAMs
 async function loadRams() {
     try {
-        const res = await fetch(`${API}/admin/rams`);
+        const res = await fetch(`${API}/admin/rams`, {
+            headers: getAuthHeaders()
+        });
+        if (res.status === 401) {
+            adminLogout();
+            return;
+        }
         rams = await res.json();
         renderRamsList();
     } catch (error) {
@@ -81,9 +169,14 @@ async function addNewRam() {
     try {
         const res = await fetch(`${API}/admin/rams`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(newRam)
         });
+
+        if (res.status === 401) {
+            adminLogout();
+            return;
+        }
 
         if (res.ok) {
             alert('RAM added successfully!');
@@ -116,9 +209,14 @@ async function updateRam(id) {
     try {
         const res = await fetch(`${API}/admin/rams/${id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(updatedRam)
         });
+
+        if (res.status === 401) {
+            adminLogout();
+            return;
+        }
 
         if (res.ok) {
             alert('RAM updated successfully!');
@@ -137,8 +235,14 @@ async function deleteRam(id) {
     if (confirm('Are you sure you want to delete this RAM?')) {
         try {
             const res = await fetch(`${API}/admin/rams/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: getAuthHeaders()
             });
+
+            if (res.status === 401) {
+                adminLogout();
+                return;
+            }
 
             if (res.ok) {
                 alert('RAM deleted successfully!');
@@ -156,7 +260,13 @@ async function deleteRam(id) {
 // Load Orders
 async function loadOrders() {
     try {
-        const res = await fetch(`${API}/admin/orders`);
+        const res = await fetch(`${API}/admin/orders`, {
+            headers: getAuthHeaders()
+        });
+        if (res.status === 401) {
+            adminLogout();
+            return;
+        }
         orders = await res.json();
         renderOrdersList();
     } catch (error) {
@@ -190,7 +300,13 @@ function renderOrdersList() {
 // Load Reviews
 async function loadReviews() {
     try {
-        const res = await fetch(`${API}/admin/reviews`);
+        const res = await fetch(`${API}/admin/reviews`, {
+            headers: getAuthHeaders()
+        });
+        if (res.status === 401) {
+            adminLogout();
+            return;
+        }
         reviews = await res.json();
         renderReviewsList();
     } catch (error) {
@@ -221,9 +337,6 @@ function renderReviewsList() {
     });
 }
 
-// Initialize admin panel
-loadAdminData();
-
 // Test email functionality
 async function testEmail() {
     const email = document.getElementById('testEmail').value.trim();
@@ -239,9 +352,14 @@ async function testEmail() {
     try {
         const res = await fetch(`${API}/admin/test-email`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ email: email })
         });
+
+        if (res.status === 401) {
+            adminLogout();
+            return;
+        }
 
         const data = await res.json();
         
@@ -255,3 +373,6 @@ async function testEmail() {
         resultDiv.innerHTML = '<p style="color: #ff4757;">❌ Email test failed: Network error</p>';
     }
 }
+
+// Initialize admin panel
+checkAuth();
