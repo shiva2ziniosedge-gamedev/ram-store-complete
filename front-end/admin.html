@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAM Store - Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-header { background: #1a1a2e; padding: 20px; text-align: center; }
+        .admin-section { margin: 20px 0; padding: 20px; background: #16213e; border-radius: 8px; }
+        .edit-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 10px 0; }
+        .edit-form input, .edit-form select { padding: 8px; border-radius: 4px; border: 1px solid #333; background: #0f1a2e; color: white; }
+        .btn-admin { background: #00d4ff; color: #0f1a2e; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .btn-admin:hover { background: #00b8e6; }
+        .btn-danger { background: #ff4757; color: white; }
+        .btn-danger:hover { background: #ff3742; }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1>🔧 RAM Store Admin Panel</h1>
+        <p>Manage your live database</p>
+    </div>
+
+    <div class="container">
+        <!-- RAM Management -->
+        <div class="admin-section">
+            <h2>📦 RAM Management</h2>
+            <button class="btn-admin" onclick="showAddRamForm()">+ Add New RAM</button>
+            
+            <div id="addRamForm" style="display:none; margin-top:20px;">
+                <h3>Add New RAM</h3>
+                <div class="edit-form">
+                    <input type="text" id="newName" placeholder="Name">
+                    <input type="text" id="newBrand" placeholder="Brand">
+                    <select id="newDdrType">
+                        <option value="DDR4">DDR4</option>
+                        <option value="DDR5">DDR5</option>
+                    </select>
+                    <input type="number" id="newSpeedMhz" placeholder="Speed (MHz)">
+                    <input type="number" id="newCapacityGb" placeholder="Capacity (GB)">
+                    <input type="number" id="newPrice" placeholder="Price" step="0.01">
+                    <input type="number" id="newStock" placeholder="Stock">
+                    <input type="text" id="newWarranty" placeholder="Warranty">
+                    <input type="text" id="newDescription" placeholder="Description">
+                </div>
+                <button class="btn-admin" onclick="addNewRam()">Add RAM</button>
+                <button class="btn-admin" onclick="hideAddRamForm()">Cancel</button>
+            </div>
+
+            <div id="ramsList"></div>
+        </div>
+
+        <!-- Orders Management -->
+        <div class="admin-section">
+            <h2>📋 Orders Management</h2>
+            <div id="ordersList"></div>
+        </div>
+
+        <!-- Reviews Management -->
+        <div class="admin-section">
+            <h2>⭐ Reviews Management</h2>
+            <div id="reviewsList"></div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

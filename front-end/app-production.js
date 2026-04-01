@@ -76,31 +76,45 @@ async function placeOrder() {
   const quantity     = parseInt(document.getElementById('quantity').value);
   const msg          = document.getElementById('orderMsg');
 
-  if (!customerName || !email || !ramId || quantity < 1) 
- {
+  if (!customerName || !email || !ramId || quantity < 1) {
     msg.textContent = '⚠️ Please fill all fields.';
     return;
   }
 
-  const res = await fetch(`${API}/order`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ customerName, email, ramId, quantity })
+  try {
+    msg.textContent = '⏳ Placing order...';
+    
+    const res = await fetch(`${API}/order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerName, email, ramId, quantity })
+    });
 
-  });
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
 
-  const data = await res.json();
-  msg.textContent = data.message;
+    const data = await res.json();
+    msg.textContent = data.message;
 
-  if (data.order && data.order.status !== 'StockOut') {
+    if (data.order && data.order.status !== 'StockOut') {
       const ram = rams.find(r => r.id === data.order.ramId);
-      downloadPDF(data.order, `${ram.name} ${ram.capacityGb}GB`, ram.price);
+      if (ram) {
+        // Add delay to ensure PDF generation works
+        setTimeout(() => {
+          downloadPDF(data.order, `${ram.name} ${ram.capacityGb}GB`, ram.price);
+        }, 500);
+      }
+    }
+
+    // Refresh data
+    await loadRams();
+    await loadOrders();
+
+  } catch (error) {
+    console.error('Order error:', error);
+    msg.textContent = '❌ Order failed. Please try again.';
   }
-
-  // Refresh
-  await loadRams();
-  await loadOrders();
-
 }
 
 // ── Load Orders ────────────────────────────────────────────
