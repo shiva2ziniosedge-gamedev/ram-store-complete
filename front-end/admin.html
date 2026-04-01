@@ -51,6 +51,17 @@
             <div id="ramsList"></div>
         </div>
 
+        <!-- Email Test -->
+        <div class="admin-section">
+            <h2>📧 Email Test</h2>
+            <p>Test if email notifications are working:</p>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <input type="email" id="testEmail" placeholder="Enter email to test" style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #333; background: #0f1a2e; color: white;">
+                <button class="btn-admin" onclick="testEmail()">Send Test Email</button>
+            </div>
+            <div id="emailTestResult" style="margin-top: 10px;"></div>
+        </div>
+
         <!-- Orders Management -->
         <div class="admin-section">
             <h2>📋 Orders Management</h2>

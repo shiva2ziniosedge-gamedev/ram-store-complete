@@ -68,4 +68,31 @@ public class AdminController : ControllerBase
     {
         return await _context.Reviews.Include(r => r.Ram).ToListAsync();
     }
+
+    // POST: api/admin/test-email - Test email functionality
+    [HttpPost("test-email")]
+    public async Task<IActionResult> TestEmail([FromBody] TestEmailRequest request)
+    {
+        try
+        {
+            var emailService = HttpContext.RequestServices.GetRequiredService<EmailService>();
+            await emailService.SendOrderConfirmationAsync(
+                request.Email,
+                "Test Customer",
+                "Test RAM 16GB DDR4",
+                1,
+                2500
+            );
+            return Ok(new { message = "Test email sent successfully" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Email test failed: {ex.Message}" });
+        }
+    }
+}
+
+public class TestEmailRequest
+{
+    public string Email { get; set; } = "";
 }

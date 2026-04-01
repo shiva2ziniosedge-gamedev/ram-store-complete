@@ -223,3 +223,35 @@ function renderReviewsList() {
 
 // Initialize admin panel
 loadAdminData();
+
+// Test email functionality
+async function testEmail() {
+    const email = document.getElementById('testEmail').value.trim();
+    const resultDiv = document.getElementById('emailTestResult');
+    
+    if (!email) {
+        resultDiv.innerHTML = '<p style="color: #ff4757;">Please enter an email address</p>';
+        return;
+    }
+
+    resultDiv.innerHTML = '<p style="color: #00d4ff;">Sending test email...</p>';
+
+    try {
+        const res = await fetch(`${API}/admin/test-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        });
+
+        const data = await res.json();
+        
+        if (res.ok) {
+            resultDiv.innerHTML = '<p style="color: #2ed573;">✅ Test email sent successfully! Check your inbox.</p>';
+        } else {
+            resultDiv.innerHTML = `<p style="color: #ff4757;">❌ Email test failed: ${data.message}</p>`;
+        }
+    } catch (error) {
+        console.error('Email test error:', error);
+        resultDiv.innerHTML = '<p style="color: #ff4757;">❌ Email test failed: Network error</p>';
+    }
+}
