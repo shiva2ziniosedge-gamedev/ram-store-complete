@@ -6,12 +6,10 @@ namespace RamApi.Services;
 public class EmailService
 {
     private readonly IConfiguration _config;
-    private readonly ILogger<EmailService> _logger;
 
-    public EmailService(IConfiguration config, ILogger<EmailService> logger)
+    public EmailService(IConfiguration config)
     {
         _config = config;
-        _logger = logger;
     }
 
     public async Task SendOrderConfirmationAsync(string toEmail, string customerName, string ramName, int quantity, decimal total)
@@ -23,12 +21,12 @@ public class EmailService
             var host = _config["Email:Host"];
             var portStr = _config["Email:Port"];
 
-            _logger.LogInformation($"Attempting to send email to {toEmail}");
-            _logger.LogInformation($"Email config - From: {from}, Host: {host}, Port: {portStr}");
+            Console.WriteLine($"Attempting to send email to {toEmail}");
+            Console.WriteLine($"Email config - From: {from}, Host: {host}, Port: {portStr}");
 
             if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(host))
             {
-                _logger.LogError("Email configuration is missing");
+                Console.WriteLine("Email configuration is missing");
                 return;
             }
 
@@ -80,21 +78,22 @@ public class EmailService
 
             using var smtp = new SmtpClient();
             
-            _logger.LogInformation($"Connecting to SMTP server {host}:{port}");
+            Console.WriteLine($"Connecting to SMTP server {host}:{port}");
             await smtp.ConnectAsync(host, port, MailKit.Security.SecureSocketOptions.StartTls);
             
-            _logger.LogInformation("Authenticating with SMTP server");
+            Console.WriteLine("Authenticating with SMTP server");
             await smtp.AuthenticateAsync(from, password);
             
-            _logger.LogInformation("Sending email");
+            Console.WriteLine("Sending email");
             await smtp.SendAsync(message);
             await smtp.DisconnectAsync(true);
 
-            _logger.LogInformation($"Email sent successfully to {toEmail}");
+            Console.WriteLine($"Email sent successfully to {toEmail}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Failed to send email to {toEmail}: {ex.Message}");
+            Console.WriteLine($"Failed to send email to {toEmail}: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
             // Don't throw - we don't want email failures to break the order process
         }
     }
