@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RamApi.Data;
 using RamApi.Models;
+using RamApi.Services;
 
 namespace RamApi.Controllers;
 
