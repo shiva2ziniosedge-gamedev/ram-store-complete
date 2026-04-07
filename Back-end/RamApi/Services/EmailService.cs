@@ -92,7 +92,8 @@ public class EmailService
             using var smtp = new SmtpClient();
             
             Console.WriteLine($"Connecting to SMTP server {host}:{port}");
-            await smtp.ConnectAsync(host, port, MailKit.Security.SecureSocketOptions.StartTls);
+            // Try Auto mode for better compatibility with Outlook
+            await smtp.ConnectAsync(host, port, MailKit.Security.SecureSocketOptions.Auto);
             
             Console.WriteLine("Authenticating with SMTP server");
             await smtp.AuthenticateAsync(from, password);
