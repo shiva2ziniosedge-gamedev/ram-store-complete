@@ -21,14 +21,26 @@ public class EmailService
             var host = _config["Email:Host"];
             var portStr = _config["Email:Port"];
 
+            Console.WriteLine($"=== EMAIL DEBUG START ===");
             Console.WriteLine($"Attempting to send email to {toEmail}");
-            Console.WriteLine($"Email config - From: {from}, Host: {host}, Port: {portStr}");
-            Console.WriteLine($"Password configured: {!string.IsNullOrEmpty(password)} (length: {password?.Length ?? 0})");
+            Console.WriteLine($"Email:From = {from}");
+            Console.WriteLine($"Email:Host = {host}");
+            Console.WriteLine($"Email:Port = {portStr}");
+            Console.WriteLine($"Password is null or empty: {string.IsNullOrEmpty(password)}");
+            Console.WriteLine($"Password length: {password?.Length ?? 0}");
+            if (!string.IsNullOrEmpty(password))
+            {
+                Console.WriteLine($"Password first 4 chars: {password.Substring(0, Math.Min(4, password.Length))}****");
+            }
+            Console.WriteLine($"=== EMAIL DEBUG END ===");
 
             if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(host))
             {
-                Console.WriteLine($"Email configuration is missing - From: {string.IsNullOrEmpty(from)}, Password: {string.IsNullOrEmpty(password)}, Host: {string.IsNullOrEmpty(host)}");
-                return;
+                Console.WriteLine($"ERROR: Email configuration is missing!");
+                Console.WriteLine($"From empty: {string.IsNullOrEmpty(from)}");
+                Console.WriteLine($"Password empty: {string.IsNullOrEmpty(password)}");
+                Console.WriteLine($"Host empty: {string.IsNullOrEmpty(host)}");
+                throw new Exception("Email configuration is incomplete");
             }
 
             var port = int.Parse(portStr ?? "587");
