@@ -23,10 +23,11 @@ public class EmailService
 
             Console.WriteLine($"Attempting to send email to {toEmail}");
             Console.WriteLine($"Email config - From: {from}, Host: {host}, Port: {portStr}");
+            Console.WriteLine($"Password configured: {!string.IsNullOrEmpty(password)} (length: {password?.Length ?? 0})");
 
             if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(host))
             {
-                Console.WriteLine("Email configuration is missing");
+                Console.WriteLine($"Email configuration is missing - From: {string.IsNullOrEmpty(from)}, Password: {string.IsNullOrEmpty(password)}, Host: {string.IsNullOrEmpty(host)}");
                 return;
             }
 
