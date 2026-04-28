@@ -23,6 +23,8 @@ function createScrollToTop() {
         z-index: 9999;
         box-shadow: 0 4px 15px rgba(0,212,255,0.4);
         transition: opacity 0.3s;
+        align-items: center;
+        justify-content: center;
     `;
 
     // click → scroll to top

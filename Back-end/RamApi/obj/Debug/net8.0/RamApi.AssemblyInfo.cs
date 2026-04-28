@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RamApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66e6ebf370dd74b1c96adf86bcfc814611690be6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a16d0d8374d56bd108f9d04853a517f8091c5a8f")]
 [assembly: System.Reflection.AssemblyProductAttribute("RamApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RamApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

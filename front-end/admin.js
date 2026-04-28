@@ -1,5 +1,5 @@
 // Admin Panel JavaScript
-const API = 'https://ram-store-complete.onrender.com/api';
+const API = 'http://localhost:5000/api';
 
 let rams = [];
 let orders = [];
